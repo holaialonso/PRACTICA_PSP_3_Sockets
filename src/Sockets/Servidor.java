@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Servidor {
 	
@@ -17,7 +18,11 @@ public class Servidor {
 	}
 
 	//Main
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
+		
+		ArrayList <HiloServidor> hilosServidor = new ArrayList();
+		
+		
 		try {
 			
 			System.out.println("(Servidor) Servidor esperando conexiones");
@@ -43,7 +48,9 @@ public class Servidor {
 				
 				//Creo el hilo
 				HiloServidor hilo = new HiloServidor(socket, input, output, nombreCliente);
-				hilo.start();
+				hilosServidor.add(hilo); //almaceno el hilo
+				hilosServidor.get((hilosServidor.size())-1).start(); //lo lanzo
+				
 				
 			}
 		} catch (IOException e) {
@@ -58,7 +65,13 @@ public class Servidor {
 	            }
 	        }
 	        
-	       //join de los hilos
+	       //Termino con la ejecución de los hilos
+	       for(int i=0; i<hilosServidor.size(); i++) {
+	    	   
+	    	   hilosServidor.get(i).join();
+	       }
+	        
+	        
 	    }
 
 	}

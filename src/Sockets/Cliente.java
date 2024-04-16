@@ -11,7 +11,7 @@ public class Cliente{
 	
 	
 	//Main
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		
 		String[] nombresClientes = {"Vilma", "Pedro", "Betty", "Pablo"};
 		ArrayList<HiloCliente> clientes = new ArrayList();
@@ -22,7 +22,14 @@ public class Cliente{
 			clientes.add(new HiloCliente(nombresClientes[i], nombresClientes));
 			clientes.get(i).start();			
 			
-		}			
+		}	
+		
+		
+		//Una vez que se han realizado las acciones correspondientes, recorro el array para finalizar la ejecución de los hilos
+		for(int i=0; i<clientes.size(); i++) {
+			
+			clientes.get(i).join();
+		}
 		
 	}
 	
